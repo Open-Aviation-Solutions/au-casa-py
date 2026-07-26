@@ -51,7 +51,9 @@ is unmerged (`au-casa` PR #2, stacked on PR #1). Once both land, **repoint to
 `branch = "main"`** and re-run `make check`. That pin is the only thing
 blocking this.
 
-Local verification uses a temporary `path` dependency — see `INSTRUCTIONS.md`.
+The branch is perfectly reachable; only a sandboxed agent environment has
+trouble fetching it, for the reason (and with the workaround) in
+`INSTRUCTIONS.md`.
 
 ## Acceptance criteria
 
@@ -67,8 +69,8 @@ Local verification uses a temporary `path` dependency — see `INSTRUCTIONS.md`.
       override raises.
 - [x] `make check` passes (clippy `-D warnings`, fmt, 23 pytest tests).
 - [ ] Dependency repointed to `main` after `au-casa` PRs #1 and #2 merge.
-- [ ] CI verified green — the workflow has never run, since the repo is new
-      and its dependency branch is unmerged.
+- [x] `Cargo.lock` committed, resolved against the real git dependency.
+- [ ] CI verified green — the workflow has never run, since the repo is new.
 
 ## Related
 

@@ -43,18 +43,27 @@ the consuming application.
   Rust enum variants (`FstdRecognition::ForeignStateQualified`) become static
   constructors plus a getter, since PyO3 plain enums cannot carry data.
 
-## Verifying locally
+## Verifying in a sandboxed agent environment
 
-`Cargo.toml` pins `au-casa` to a git branch. Cargo cannot fetch it from a
-sandboxed environment (SSH auth is unavailable to its subprocess), so to build
-against a local checkout, temporarily swap the dependency for a path one:
+`Cargo.toml` depends on `au-casa` over git. Nothing is wrong with that
+dependency — but this developer's global gitconfig rewrites
+`https://github.com/` to `git@github.com:` (`url.insteadOf`), so cargo's fetch
+becomes an SSH one, and an agent sandbox without the SSH key cannot
+authenticate.
 
-```toml
-au-casa = { path = "../au-casa" }
+Work around it by bypassing the global rewrite and supplying a token, rather
+than by switching to a path dependency (which changes what is actually being
+verified):
+
+```sh
+GIT_CONFIG_GLOBAL=/dev/null \
+GIT_CONFIG_COUNT=1 \
+GIT_CONFIG_KEY_0="url.https://x-access-token:$(gh auth token)@github.com/.insteadOf" \
+GIT_CONFIG_VALUE_0="https://github.com/" \
+CARGO_NET_GIT_FETCH_WITH_CLI=true make check
 ```
 
-Restore the git line before committing. A `[patch]` section does *not* work —
-cargo still tries to update the git source to resolve the branch.
+Ordinary developer machines with working SSH need none of this.
 
 ## Commands
 
