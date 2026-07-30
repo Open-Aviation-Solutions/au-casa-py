@@ -123,12 +123,29 @@ class RecognisedForeignState:
     Switzerland: RecognisedForeignState
     UnitedKingdom: RecognisedForeignState
 
+class FstdRecognitionKind:
+    """Which of the five reg 61.010 sub-types a recognition is.
+
+    Needed because FstdRecognition is a struct with static constructors (a
+    PyO3 plain enum cannot carry the foreign State), so without this there is
+    no way to read back which sub-type an instance is.
+    """
+
+    QualifiedFlightSimulator: FstdRecognitionKind
+    QualifiedFlightTrainingDevice: FstdRecognitionKind
+    SyntheticTrainerCao45: FstdRecognitionKind
+    PrescribedUnderReg61045: FstdRecognitionKind
+    ForeignStateQualified: FstdRecognitionKind
+
 class FstdRecognition:
     """The basis on which a device is an FSTD for Part 61 purposes — the five
     sub-types of the reg 61.010 definition.
 
     There is deliberately no value for an unrecognised device: that is the
     absence of recognition, i.e. None.
+
+    `kind` and `foreign_state` fully describe any value, and `from_parts`
+    rebuilds one from them, so a recognition can be persisted and restored.
     """
 
     @staticmethod
@@ -153,6 +170,19 @@ class FstdRecognition:
     ) -> FstdRecognition:
         """Reg 61.010(e)."""
 
+    @staticmethod
+    def from_parts(
+        kind: FstdRecognitionKind,
+        state: RecognisedForeignState | None = None,
+    ) -> FstdRecognition:
+        """Rebuild a recognition from its readable parts.
+
+        Raises ValueError if state disagrees with kind — required for
+        ForeignStateQualified, meaningless otherwise.
+        """
+
+    @property
+    def kind(self) -> FstdRecognitionKind: ...
     @property
     def foreign_state(self) -> RecognisedForeignState | None: ...
 
