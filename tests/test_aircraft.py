@@ -10,8 +10,24 @@ def test_catalogued_designator_resolves() -> None:
     assert result.category == c.AircraftCategory.Aeroplane
     assert result.class_rating == c.AircraftClassRating.SingleEngineAeroplane
     assert result.design_features == []
-    assert result.confidence == c.Confidence.Provisional
+    assert result.confidence == c.Confidence.Confirmed
     assert result.source is not None
+
+
+def test_confidence_crosses_the_boundary_for_both_values() -> None:
+    # Confidence is per-row upstream, so both variants must be reachable
+    # from Python — a binding that only ever saw one value would hide a
+    # consumer's ability to tell a checked row from an unchecked one.
+    assert c.resolve_classification("CH7B").confidence == c.Confidence.Confirmed
+    assert c.resolve_classification("R44").confidence == c.Confidence.Provisional
+
+
+def test_citabria_resolves_to_single_engine_aeroplane() -> None:
+    # pilot-logbook maps its "Citabria" rows to CH7B (both airframes are
+    # American Champion 7GCBC), so this is the path that import exercises.
+    result = c.resolve_classification("CH7B")
+    assert result.category == c.AircraftCategory.Aeroplane
+    assert result.class_rating == c.AircraftClassRating.SingleEngineAeroplane
 
 
 def test_twin_resolves_to_multi_engine() -> None:
