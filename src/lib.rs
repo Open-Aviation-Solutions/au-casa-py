@@ -25,6 +25,7 @@ fn au_casa(py: Python<'_>, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<aircraft::ClassificationOverride>()?;
     m.add_class::<aircraft::CasaAircraftClassification>()?;
     m.add_class::<fstd::RecognisedForeignState>()?;
+    m.add_class::<fstd::FstdRecognitionKind>()?;
     m.add_class::<fstd::FstdRecognition>()?;
 
     m.add_function(wrap_pyfunction!(aircraft::resolve_classification, m)?)?;
