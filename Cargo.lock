@@ -5,7 +5,7 @@ version = 4
 [[package]]
 name = "au-casa"
 version = "0.1.0"
-source = "git+https://github.com/Open-Aviation-Solutions/au-casa?branch=add-aircraft-classification#f6b55bc9200ba90b97cdce6b150f6bb00181c5d8"
+source = "git+https://github.com/Open-Aviation-Solutions/au-casa?branch=main#71f641a08bbff5644a9e302a25f89e712579421a"
 dependencies = [
  "serde",
  "thiserror",

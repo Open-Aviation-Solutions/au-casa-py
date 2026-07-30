@@ -1,7 +1,6 @@
 # Python bindings for the au-casa crate
 
-**Status:** in progress — implemented and passing; the Cargo dependency is
-pinned to an unmerged `au-casa` branch (see Before merging).
+**Status:** done — implemented, passing, and depending on `au-casa` `main`.
 
 ## Purpose
 
@@ -44,16 +43,16 @@ This crate is the missing link. It exposes:
    `skip_from_py_object`. PyO3 0.29 warns if neither is chosen and the derive
    goes away in a later release.
 
-## Before merging
+## Dependency pin (resolved 2026-07-30)
 
-`Cargo.toml` pins `au-casa` to `branch = "add-aircraft-classification"`, which
-is unmerged (`au-casa` PR #2, stacked on PR #1). Once both land, **repoint to
-`branch = "main"`** and re-run `make check`. That pin is the only thing
-blocking this.
+`Cargo.toml` was pinned to `branch = "add-aircraft-classification"` while
+`au-casa` PRs #1 and #2 were in review. Both merged on 2026-07-29, and the
+dependency now tracks `branch = "main"`, locked at `71f641a`.
 
-The branch is perfectly reachable; only a sandboxed agent environment has
-trouble fetching it, for the reason (and with the workaround) in
-`INSTRUCTIONS.md`.
+Note for future pins: the branch was always perfectly reachable. Only a
+sandboxed agent environment has trouble fetching it, for the reason (and with
+the workaround) in `INSTRUCTIONS.md` — the fix is never a path dependency,
+which changes what is actually being verified.
 
 ## Acceptance criteria
 
@@ -68,9 +67,9 @@ trouble fetching it, for the reason (and with the workaround) in
       is `None` rather than a sentinel, and that an invalid design-feature
       override raises.
 - [x] `make check` passes (clippy `-D warnings`, fmt, 23 pytest tests).
-- [ ] Dependency repointed to `main` after `au-casa` PRs #1 and #2 merge.
+- [x] Dependency repointed to `main` after `au-casa` PRs #1 and #2 merged.
 - [x] `Cargo.lock` committed, resolved against the real git dependency.
-- [ ] CI verified green — the workflow has never run, since the repo is new.
+- [x] CI verified green.
 
 ## Related
 
