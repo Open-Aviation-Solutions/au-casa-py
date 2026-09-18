@@ -5,7 +5,7 @@ version = 4
 [[package]]
 name = "au-casa"
 version = "0.1.0"
-source = "git+https://github.com/Open-Aviation-Solutions/au-casa?branch=main#00ae124d8001e1bd2d1ae9996f8d2a553020dde3"
+source = "git+https://github.com/Open-Aviation-Solutions/au-casa?branch=main#98f3802750722d21ec8f4e3b0473eac2f266b343"
 dependencies = [
  "serde",
  "thiserror",
